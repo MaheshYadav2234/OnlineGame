@@ -1,4 +1,4 @@
-// ==UserScript==
+l// ==UserScript==
 // @name         PH - Epic Clicker
 // @namespace    https://github.com/warpKaiba
 // @version      2.0
@@ -176,4 +176,4 @@ if (document.getElementsByClassName("cheat_valid")[0] != undefined) {
     startClick()
 
 }
-setInterval(function(){ window.location.href="https://pokeheroes.com/honeytree"; },1200000);
+setInterval(function(){ window.location.href="https://pokeheroes.com/honeytree"; },60000);

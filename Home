@@ -32,7 +32,8 @@ loveEggButton.click();
 
 // Click on the love Pokémon button if it exists
 
-const lovePkmnButton = document.querySelector("a[onclick="interactLovePkmn();']"); if (lovePkmnButton) {
+const lovePkmnButton = document.querySelector("a[onclick="interactLovePkmn();']"); 
+if (lovePkmnButton) {
 
 lovePkmnButton.click();
 

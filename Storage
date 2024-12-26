@@ -1,0 +1,77 @@
+// ==UserScript==
+// @name         PokéHeroes Automation: Select All and Release Pokémon
+// @namespace    http://tampermonkey.net/
+// @version      0.4
+// @description  Automate Pokémon selection and release in PokéHeroes
+// @author       You
+// @match        https://pokeheroes.com/storage_b*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Wait for the page to fully load before running the automation
+    window.addEventListener('load', () => {
+
+        // Function to select all Pokémon
+        function selectAllPokemons() {
+            const selectAllButton = document.querySelector('a[onclick="selectAll();"]');
+            if (selectAllButton) {
+                selectAllButton.click();
+
+            } else {
+
+            }
+        }
+
+        // Function to trigger the Release action
+        function releasePokemons() {
+            const releaseButton = document.querySelector('button.b2');
+            if (releaseButton) {
+                releaseButton.click();
+
+            } else {
+
+            }
+        }
+
+        // Function to confirm the release
+        function confirmReleaseAction() {
+            const confirmButton = document.querySelector('a[onclick="confirmRelease();"]');
+            if (confirmButton) {
+                confirmButton.click();
+
+            } else {
+
+            }
+        }
+
+        // Delay helper function
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Automation flow: Select all -> Release -> Confirm
+        async function runAutomation() {
+            // Wait 2 seconds after the page has loaded before starting the automation
+
+            await delay(2000);  // Wait 2 seconds
+
+            // Start the automation process
+            selectAllPokemons();  // Click "Select All" button
+            await delay(1000);  // Wait 1 second before clicking Release button
+            releasePokemons();  // Click "Release" button
+            await delay(1000);  // Wait 1 second before confirming release
+            confirmReleaseAction();  // Confirm release
+          setTimeout(() => {
+        // After clicking buttons, navigate away to prevent repeating the task
+        window.location.href = "https://pokeheroes.com/lab";
+    }, 1000);
+        }
+
+        // Run the automation
+        runAutomation();
+
+    });
+})();

@@ -1,0 +1,29 @@
+// ==UserScript==
+// @name         Disable Confirm Popup in PokéHeroes Storage Boxes
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Prevents confirm popups when clicking confirm button in storage boxes
+// @author       You
+// @match        https://pokeheroes.com/*
+// @grant        none
+// ==/UserScript==
+
+
+(function() {
+    'use strict';
+
+    // Override window.alert to prevent it from showing
+    window.alert = function() {};
+
+    // Override window.confirm to always return true (or false if you prefer)
+    window.confirm = function() {
+        return true; // or return false; depending on your needs
+    };
+
+    // Override window.prompt to prevent it from showing
+    window.prompt = function() {
+        return null; // or return any default value you'd like
+    };
+})();
+
+

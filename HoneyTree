@@ -1,0 +1,40 @@
+// ==UserScript==
+// @name         Route53
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://pokeheroes.com/honeytree*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=pokeheroes.com
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+// Wait for the green field to appear
+    function throwball(){
+const greenField = document.getElementById('greenfield');
+        if(greenField){
+while (greenField) {
+  // Try to click on the first tag
+  const tags = greenField.querySelectorAll('a');
+  if (tags.length > 0) {
+    tags[0].click();
+    break; // Exit the loop if the tag was clicked
+  }
+  // Check if the green field is still present
+  if (!document.contains(greenField)) {
+    break; // Exit the loop if the green field has disappeared
+  }
+}}else{
+window.location.href="https://pokeheroes.com/dw_shop";
+}
+
+    }
+    setInterval(throwball,1000);
+
+    setInterval(() => {
+  location.reload();
+}, (Math.floor(Math.random() * 6) + 5) * 60 * 1000); // Random time between 5 and 10 minutes
+    // Your code here...
+})();

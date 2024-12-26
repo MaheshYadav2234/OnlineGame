@@ -1,0 +1,26 @@
+// ==UserScript==
+// @name        Home Page
+// @namespace   Violentmonkey Scripts
+// @match       https://pokeheroes.com/*
+// @grant       none
+// @version     1.0
+// @author      -
+// @description 12/26/2024, 4:59:00 PM
+// ==/UserScript==
+window.addEventListener('load', function() {
+    // Find the 'Cheri Berry' link and click it
+    const cheriBerryLink = document.querySelector('a[onclick="interactLovePkmn();"]');
+    if (cheriBerryLink) {
+        cheriBerryLink.click();
+    }
+
+    // Find the 'Blue Scarf' link and click it
+    const blueScarfLink = document.querySelector('a[onclick="interactLoveEgg();"]');
+    if (blueScarfLink) {
+        blueScarfLink.click();
+    }
+});
+
+setTimeout(function() {
+        window.location.href = "https://pokeheroes.com/storage_box"; // Replace with the target URL
+    }, 180000);

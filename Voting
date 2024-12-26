@@ -1,0 +1,23 @@
+// ==UserScript==
+// @name         votingEmera
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://pokeheroes.com/beautycontest
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=pokeheroes.com
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+function clickRandom() {
+  var x = Math.floor(Math.random() * 10) + 1;
+  document.getElementById("photoratingbox").getElementsByTagName("img")[0].click();
+  votePhoto(x);
+}
+
+setInterval(clickRandom, 1000); // calls clickRandom every second
+
+    // Your code here...
+})();

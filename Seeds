@@ -1,0 +1,36 @@
+// ==UserScript==
+// @name        SeedsMaking
+// @namespace   Violentmonkey Scripts
+// @match       https://pokeheroes.com/toolshed*
+// @grant       none
+// @version     1.0
+// @author      -
+// @description 12/26/2024, 4:44:23 PM
+// ==/UserScript==
+
+
+(function() {
+    'use strict';
+
+    // Wait for the DOM to fully load
+    window.addEventListener('load', function() {
+        // Select the first button by its ID and click it
+      setTimeout(function() {
+        let collectSeedsButton = document.getElementById('collectseeds');
+        if (collectSeedsButton) {
+            collectSeedsButton.click(); // Simulate a click on the button
+
+        }},1000);
+
+        // Wait a little bit before clicking the second button to avoid conflicts
+        setTimeout(function() {
+            let fillBerryButton = document.getElementById('fillberry');
+            if (fillBerryButton) {
+                fillBerryButton.click(); // Simulate a click on the button
+
+                // After clicking the fillberry button, redirect to https://pokeheroes.com/
+                window.location.href = 'https://pokeheroes.com/dw_shop';
+            }
+        }, 2000); // Delay in milliseconds (500ms, adjust if necessary)
+    });
+})();

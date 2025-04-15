@@ -1,0 +1,284 @@
+// ==UserScript==
+// @name         PokeHeroes Auto Clicker - Pokémon Image
+// @namespace    http://tampermonkey.net/
+// @version      1.2
+// @description  Go through multiple PokeHeroes pages, click the Pokémon image if found, else continue checking other pages automatically.
+// @author       You
+// @match        https://pokeheroes.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+   const targetImgSrc = "//staticpokeheroes.com/img/pokemon/bw_front/0999c.png";
+    const STORAGE_KEY = 'ph_current_index';
+
+    const urlsToVisit = [
+    "https://pokeheroes.com/report_user.php?name=Riako",
+    "https://pokeheroes.com/release.php",
+    "https://pokeheroes.com/iv",
+    "https://pokeheroes.com/pokemon.php?id=18877371",
+    "https://pokeheroes.com/dw_gift_log?username=Shiro-kun",
+    "https://pokeheroes.com/dw_collection?username=Shiro-kun",
+    "https://pokeheroes.com/userpokedex.php?name=Shiro-kun",
+    "https://pokeheroes.com/userboxes.php?name=Shiro-kun&box=7",
+    "https://pokeheroes.com/about_pokeheroes",
+    "https://pokeheroes.com/userprofile?name=Shiro-kun",
+    "https://pokeheroes.com/storage_box",
+    "https://pokeheroes.com/pokemonrecovery",
+    "https://pokeheroes.com/bill.php",
+    "https://pokeheroes.com/party",
+    "https://pokeheroes.com/browse_hashtag?tag=beatingoak",
+    "https://pokeheroes.com/notification_wall",
+    "https://pokeheroes.com/notifications",
+    "https://pokeheroes.com/battle.php",
+    "https://pokeheroes.com/battle_user",
+    "https://pokeheroes.com/battle_team",
+    "https://pokeheroes.com/weather",
+    "https://pokeheroes.com/emerabank?nug",
+    "https://pokeheroes.com/emerabank",
+    "https://pokeheroes.com/index",
+    "https://pokeheroes.com/use_vitamin.php?item=Rare%20Candy",
+    "https://pokeheroes.com/take_item.php",
+    "https://pokeheroes.com/mysterybox.php",
+    "https://pokeheroes.com/evolve.php?item=Fire%20Stone",
+    "https://pokeheroes.com/bag",
+    "https://pokeheroes.com/trick_or_treat?user=Shiro-kun",
+    "https://pokeheroes.com/scs",
+    "https://pokeheroes.com/wondercards.php",
+    "https://pokeheroes.com/event_distribution",
+    "https://pokeheroes.com/paldearesearch",
+    "https://pokeheroes.com/doesitbreakmychain",
+    "https://pokeheroes.com/pokeradar_history",
+    "https://pokeheroes.com/pokeradar",
+    "https://pokeheroes.com/puzzle",
+    "https://pokeheroes.com/badges",
+    "https://pokeheroes.com/pokedex",
+    "http://pokeheroes.com/town",
+    "https://pokeheroes.com/royal_tunnel",
+    "https://pokeheroes.com/safari_zone",
+    "https://pokeheroes.com/tall_grass.php",
+    "https://pokeheroes.com/daycare",
+    "https://pokeheroes.com/premium_features",
+    "https://pokeheroes.com/sell_items",
+    "https://pokeheroes.com/itemshop",
+    "https://pokeheroes.com/dw_shop",
+    "https://pokeheroes.com/eventpass",
+    "https://pokeheroes.com/buyeventpoints",
+    "https://pokeheroes.com/eventshop",
+    "https://pokeheroes.com/salon_haircut",
+    "https://pokeheroes.com/salon",
+    "https://pokeheroes.com/battle_shop",
+    "https://pokeheroes.com/mall#mall",
+    "https://pokeheroes.com/lab",
+    "https://pokeheroes.com/fountain",
+    "https://pokeheroes.com/berrydex",
+    "https://pokeheroes.com/bulletinboard",
+    "https://pokeheroes.com/berrymarket?search=lorelei&suser=&sitem=Aguav+Berry&slevel_min=1&slevel_max=16",
+    "https://pokeheroes.com/berrymarket",
+    "https://pokeheroes.com/toolshed",
+    "https://pokeheroes.com/berrygarden",
+    "https://pokeheroes.com/mermaid",
+    "https://pokeheroes.com/seashellos",
+    "https://pokeheroes.com/beach",
+    "https://pokeheroes.com/accessoires",
+    "https://pokeheroes.com/beautycontest",
+    "https://pokeheroes.com/bugcontest",
+    "https://pokeheroes.com/square",
+    "https://pokeheroes.com/honeytree",
+    "https://pokeheroes.com/honeycomb",
+    "https://pokeheroes.com/moomoo",
+    "https://pokeheroes.com/route53",
+    "https://pokeheroes.com/gts_new?gift",
+    "https://pokeheroes.com/bagvalue",
+    "https://pokeheroes.com/gts_shop?history",
+    "https://pokeheroes.com/gts_shop?type=2",
+    "https://pokeheroes.com/gts_search?type=0",
+    "https://pokeheroes.com/gts_search?type=1",
+    "https://pokeheroes.com/gts_wondertrade_history?pkmnid=32431334",
+    "https://pokeheroes.com/gts_wondertrade_history",
+    "https://pokeheroes.com/gts_wondertrade.php?type=shiny",
+    "https://pokeheroes.com/gts_wondertrade.php",
+    "https://pokeheroes.com/gts_my_offers",
+    "https://pokeheroes.com/gts_my_trades",
+    "https://pokeheroes.com/gts_offer",
+    "https://pokeheroes.com/gts_new",
+    "https://pokeheroes.com/gts_trade?id=497596",
+    "https://pokeheroes.com/stonks?i=Normal+Gem",
+    "https://pokeheroes.com/stonks?p=shiny%20suicune",
+    "https://pokeheroes.com/gts",
+    "https://pokeheroes.com/gc_wheel",
+    "https://pokeheroes.com/gc_coinflip.php",
+    "https://pokeheroes.com/treasures",
+    "https://pokeheroes.com/gc_hol.php",
+    "https://pokeheroes.com/gc_lottery_tickets.php",
+    "https://pokeheroes.com/gc_lottery.php",
+    "https://pokeheroes.com/golden_slot.php?mode=legend",
+    "https://pokeheroes.com/golden_slot.php?mode=plus",
+    "https://pokeheroes.com/golden_slot.php",
+    "https://pokeheroes.com/gc_magearna",
+    "https://pokeheroes.com/gc_hangman?suggest",
+    "https://pokeheroes.com/gc_hangman?",
+    "https://pokeheroes.com/gc_concentration",
+    "https://pokeheroes.com/gc_prize_exchange.php",
+    "https://pokeheroes.com/game_center",
+    "https://pokeheroes.com/auction?id=",
+    "https://pokeheroes.com/auction_setup.php",
+    "https://pokeheroes.com/auction_search?search=mega",
+    "https://pokeheroes.com/auction_search?search=shiny",
+    "https://pokeheroes.com/auction_search?search=pokedex",
+    "https://pokeheroes.com/auction_search.php",
+    "https://pokeheroes.com/auction_search?search=all",
+    "https://pokeheroes.com/auction_house",
+    "https://pokeheroes.com/ancient_cave",
+    "https://pokeheroes.com/unown",
+    "https://pokeheroes.com/keshi",
+    "https://pokeheroes.com/zekrom",
+    "https://pokeheroes.com/reshiram",
+    "https://pokeheroes.com/raylong",
+    "https://pokeheroes.com/giratina",
+    "https://pokeheroes.com/jirachi",
+    "https://pokeheroes.com/sprites_house",
+    "https://pokeheroes.com/rumble_boss?pkmnid=",
+    "https://pokeheroes.com/rumble_evolve?pkmnid=",
+    "https://pokeheroes.com/rumble_overview.php",
+    "https://pokeheroes.com/rumble_send.php",
+    "https://pokeheroes.com/rumble_start.php",
+    "https://pokeheroes.com/rumble",
+    "https://pokeheroes.com/gem_cauldron",
+    "https://pokeheroes.com/gem_exchange.php?list=full",
+    "https://pokeheroes.com/gem_exchange_offer?id=636743",
+    "https://pokeheroes.com/gem_exchange.php",
+    "https://pokeheroes.com/zygarde",
+    "https://pokeheroes.com/gem_supplier.php",
+    "https://pokeheroes.com/gem_collector",
+    "https://pokeheroes.com/forum_search?username=Mystified_Pro",
+    "https://pokeheroes.com/forum_search.php?search=Eggs",
+    "https://pokeheroes.com/forum_report?id=1907797",
+    "https://pokeheroes.com/forum_newest_posts",
+    "https://pokeheroes.com/forum_subscriptions",
+    "https://pokeheroes.com/forum_newpost.php?thread=27",
+    "https://pokeheroes.com/forum_newthread.php?subforum=9",
+    "https://pokeheroes.com/forum_editpost.php?id=1698251",
+    "https://pokeheroes.com/subforum?id=2",
+    "https://pokeheroes.com/forum",
+    "https://pokeheroes.com/stats",
+    "https://pokeheroes.com/change_birthdate",
+    "https://pokeheroes.com/verify_email",
+    "https://pokeheroes.com/style_settings",
+    "https://pokeheroes.com/profile_layout",
+    "https://pokeheroes.com/game_settings",
+    "https://pokeheroes.com/account_settings",
+    "https://pokeheroes.com/settings",
+    "https://pokeheroes.com/forum_report?id=",
+    "https://pokeheroes.com/report_palpad?name=",
+    "https://pokeheroes.com/contact",
+    "https://pokeheroes.com/newsletter_unsub",
+    "https://pokeheroes.com/feedback",
+    "https://pokeheroes.com/ph_features",
+    "https://pokeheroes.com/pm_report?id=1",
+    "https://pokeheroes.com/warnings",
+    "https://pokeheroes.com/lovetest",
+    "https://pokeheroes.com/anniv_gift",
+    "https://pokeheroes.com/mentor",
+    "https://pokeheroes.com/stafflist",
+    "https://pokeheroes.com/premium_members",
+    "https://pokeheroes.com/referred_users",
+    "https://pokeheroes.com/clicklist",
+    "https://pokeheroes.com/online",
+    "https://pokeheroes.com/interaction_stats",
+    "https://pokeheroes.com/pokemon_lite?cl_type=online",
+    "https://pokeheroes.com/union_room",
+    "https://pokeheroes.com/pm_write",
+    "https://pokeheroes.com/pm_read",
+    "https://pokeheroes.com/pm_inbox",
+    "https://pokeheroes.com/share",
+    "https://pokeheroes.com/lovemeter",
+    "https://pokeheroes.com/medal_rally",
+    "https://pokeheroes.com/ranklist",
+    "https://pokeheroes.com/userlist",
+    "https://pokeheroes.com/friendlist",
+    "https://pokeheroes.com/privacypolicy",
+    "https://pokeheroes.com/rules",
+    "https://pokeheroes.com/favoritevote",
+    "https://pokeheroes.com/blackfriday",
+    "https://pokeheroes.com/bday",
+    "https://pokeheroes.com/easter",
+    "https://pokeheroes.com/digievent",
+    "https://pokeheroes.com/zeraora?code=ZERA3070",
+    "https://pokeheroes.com/aprilfool2017",
+    "https://pokeheroes.com/adventcalendar",
+    "https://pokeheroes.com/pikapika",
+    "https://pokeheroes.com/giveaway",
+    "https://pokeheroes.com/darktober",
+    "https://pokeheroes.com/sale",
+    "https://pokeheroes.com/trick_or_treat?user=Shiro-kun",
+    "https://pokeheroes.com/halloween",
+    "https://pokeheroes.com/skygift",
+    "https://pokeheroes.com/apricornbattle",
+    "https://pokeheroes.com/berrybattle",
+    "https://pokeheroes.com/cheat",
+    "https://pokeheroes.com/kyurem?code=KYUR1658",
+    "https://pokeheroes.com/christmasgift",
+    "https://pokeheroes.com/vday",
+    "https://pokeheroes.com/ducklettweek",
+    "https://pokeheroes.com/bday",
+    "https://pokeheroes.com/scavengerhunt",
+    "https://pokeheroes.com/easter_buneary",
+    "https://pokeheroes.com/shaymin?code=SHAY4881",
+    "https://pokeheroes.com/250k",
+    "https://pokeheroes.com/3dbeta",
+    "https://pokeheroes.com/tindemera",
+    "https://pokeheroes.com/odorcalibration",
+    "https://pokeheroes.com/fair_maze",
+    "https://pokeheroes.com/fair",
+    "https://pokeheroes.com/giveawaycreator",
+    "https://pokeheroes.com/gimmighoul"
+];
+
+ let currentIndex = parseInt(localStorage.getItem(STORAGE_KEY) || '0');
+
+    function goToNextUrl() {
+        currentIndex++;
+        if (currentIndex >= urlsToVisit.length) {
+            console.log("🔁 Reached end of list. Resetting to 0.");
+            currentIndex = 0;
+        }
+        localStorage.setItem(STORAGE_KEY, currentIndex.toString());
+        window.location.href = urlsToVisit[currentIndex];
+    }
+
+    function handlePage() {
+        // Give time for slow pages
+        setTimeout(() => {
+            const imgElement = document.querySelector(`a[href] > img[src="${targetImgSrc}"]`);
+
+            if (imgElement && imgElement.parentElement) {
+                console.log("✅ Found target Pokémon! Clicking...");
+                localStorage.removeItem(STORAGE_KEY);
+                imgElement.parentElement.click();
+            } else {
+                console.log("❌ Image not found. Skipping to next page...");
+                goToNextUrl();
+            }
+        }, 1500); // You can increase this if needed (e.g. 3000 for slow loading)
+    }
+
+    window.addEventListener('load', () => {
+        try {
+            handlePage();
+        } catch (err) {
+            console.error("⚠️ Error occurred:", err);
+            goToNextUrl();
+        }
+    });
+
+    // Failsafe in case something goes wrong and script never finishes
+    setTimeout(() => {
+        console.warn("⏱️ Timeout triggered. Moving on just in case.");
+        goToNextUrl();
+    }, 10000); // Failsafe after 10 seconds
+})();
+
+
